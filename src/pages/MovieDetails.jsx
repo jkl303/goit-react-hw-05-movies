@@ -4,7 +4,7 @@ export const MovieDetails = id => {
   return (
     <div>
       <NavLink to="/">Go back</NavLink>
-      <h2></h2>
+      <h2>Movie</h2>
     </div>
   );
 };
