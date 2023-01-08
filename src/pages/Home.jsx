@@ -25,7 +25,7 @@ export const Home = () => {
         {trending.map(({ id, title }) => {
           return (
             <li key={id}>
-              <NavLink to="/movies/:movieId">{title}</NavLink>
+              <NavLink to={`movies/${id}`}>{title}</NavLink>
             </li>
           );
         })}
