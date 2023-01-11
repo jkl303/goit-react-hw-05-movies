@@ -1,4 +1,4 @@
-import { NavLink, useParams, Outlet } from 'react-router-dom';
+import { Link, useParams, Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { fetchMovies } from 'API';
 
@@ -6,14 +6,18 @@ export const MovieDetails = () => {
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState({});
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getMovieDetails = async () => {
       try {
-        const MovieDetails = await fetchMovies(`/movie/${movieId}`);
-        setMovieDetails(MovieDetails.data);
+        setLoading(true);
+        const details = await fetchMovies(`/movie/${movieId}`);
+        setMovieDetails(details.data);
       } catch {
         setError('Something went wrong. Please try again.');
+      } finally {
+        setLoading(false);
       }
     };
     getMovieDetails();
@@ -23,10 +27,10 @@ export const MovieDetails = () => {
 
   return (
     <div>
-      <NavLink to="/">Go back</NavLink>
+      <Link to="/">Go back</Link>
       <div>
         <img
-          src={`https://image.tmdb.org/t/p/w500${poster_path}`}
+          src={poster_path && `https://image.tmdb.org/t/p/w500${poster_path}`}
           alt={title}
         />
         <h2>{title}</h2>
@@ -35,20 +39,20 @@ export const MovieDetails = () => {
         <p>{overview}</p>
         <h3>Genres</h3>
         <p>
-          {genres !== undefined
-            ? genres
-                .map(({ name }) => {
-                  return name;
-                })
-                .join(', ')
-            : null}
+          {genres &&
+            genres
+              .map(({ name }) => {
+                return name;
+              })
+              .join(', ')}
         </p>
       </div>
       <p>Additional information</p>
-      <NavLink to="cast">Cast</NavLink>
-      <NavLink to="reviews">Reviews</NavLink>
+      <Link to="cast">Cast</Link>
+      <Link to="reviews">Reviews</Link>
 
       {error && <p>{error}</p>}
+      {loading && <p>Loading...</p>}
       <Outlet />
     </div>
   );
