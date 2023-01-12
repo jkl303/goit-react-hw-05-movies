@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { fetchMovies } from 'API';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useLocation } from 'react-router-dom';
+import { SearchForm } from './SearchForm.styled';
 
-export const Movies = () => {
+const Movies = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('query');
   const [results, setResults] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  console.log(query);
+  const location = useLocation();
 
   useEffect(() => {
     const searchMovie = async () => {
@@ -20,7 +21,7 @@ export const Movies = () => {
         if (searchedMovies.data.results.length < 1) {
           setResults([]);
           alert(
-            'Sorry, there are no movies matching your search queryuery. Please try again.'
+            'Sorry, there are no movies matching your search query. Please try again.'
           );
         } else {
           setResults(searchedMovies.data.results);
@@ -31,7 +32,7 @@ export const Movies = () => {
         setLoading(false);
       }
     };
-    if (query !== null) searchMovie();
+    query !== null && searchMovie();
   }, [query]);
 
   const onSearch = e => {
@@ -43,25 +44,26 @@ export const Movies = () => {
 
   return (
     <div>
-      <form className="SearchForm" onSubmit={onSearch}>
-        <button type="submit" className="SearchForm-button">
-          <span className="SearchForm-button-label">Search</span>
-        </button>
+      <SearchForm onSubmit={onSearch}>
         <input
           name="input"
-          className="SearchForm-input"
           type="text"
           autoComplete="off"
           autoFocus
-          placeholder="Search images and photos"
+          placeholder="Search movies"
         />
-      </form>
+        <button type="submit">
+          <span>Search</span>
+        </button>
+      </SearchForm>
       <ul>
         {query &&
           results.map(({ id, title }) => {
             return (
               <li key={id}>
-                <Link to={`${id}`}>{title}</Link>
+                <Link to={`${id}`} state={{ from: location }}>
+                  {title}
+                </Link>
               </li>
             );
           })}
@@ -71,3 +73,5 @@ export const Movies = () => {
     </div>
   );
 };
+
+export default Movies;

@@ -1,12 +1,14 @@
-import { Link, useParams, Outlet } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { Link, useParams, Outlet, useLocation } from 'react-router-dom';
+import { useState, useEffect, Suspense } from 'react';
 import { fetchMovies } from 'API';
 
-export const MovieDetails = () => {
+const MovieDetails = () => {
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState({});
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const backLinkHref = location.state?.from ?? '/';
 
   useEffect(() => {
     const getMovieDetails = async () => {
@@ -27,11 +29,12 @@ export const MovieDetails = () => {
 
   return (
     <div>
-      <Link to="/">Go back</Link>
+      <Link to={backLinkHref}>Go back</Link>
       <div>
         <img
           src={poster_path && `https://image.tmdb.org/t/p/w500${poster_path}`}
           alt={title}
+          width={200}
         />
         <h2>{title}</h2>
         <p>User score: {vote_average}</p>
@@ -53,7 +56,11 @@ export const MovieDetails = () => {
 
       {error && <p>{error}</p>}
       {loading && <p>Loading...</p>}
-      <Outlet />
+      <Suspense fallback={null}>
+        <Outlet />
+      </Suspense>
     </div>
   );
 };
+
+export default MovieDetails;
