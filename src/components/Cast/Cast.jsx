@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { fetchMovies } from 'API';
+import { fetch } from 'API';
 
 const Cast = () => {
   const { movieId } = useParams();
@@ -12,7 +12,7 @@ const Cast = () => {
     const getCast = async () => {
       try {
         setLoading(true);
-        const cast = await fetchMovies(`/movie/${movieId}/credits`);
+        const cast = await fetch(`/movie/${movieId}/credits`);
         setMovieCast(cast.data.cast);
       } catch {
         setError('Something went wrong. Please try again.');

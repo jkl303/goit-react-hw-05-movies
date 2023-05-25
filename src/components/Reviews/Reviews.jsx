@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { fetchMovies } from 'API';
+import { fetch } from 'API';
 
 const Reviews = () => {
   const { movieId } = useParams();
@@ -12,7 +12,7 @@ const Reviews = () => {
     const getReviews = async () => {
       try {
         setLoading(true);
-        const reviews = await fetchMovies(`/movie/${movieId}/reviews`);
+        const reviews = await fetch(`/movie/${movieId}/reviews`);
         setMovieReviews(reviews.data.results);
       } catch {
         setError('Something went wrong. Please try again.');

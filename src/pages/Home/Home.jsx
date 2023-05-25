@@ -1,33 +1,23 @@
 import { useState, useEffect } from 'react';
-import { fetchMovies } from 'API';
+import { fetch } from 'redux/operations';
 import { Link, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getItems } from 'redux/selector';
 
 const Home = () => {
-  const [trending, setTrending] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const location = useLocation();
+  const { items, isLoading, error } = useSelector(getItems);
 
   useEffect(() => {
-    const getTrending = async () => {
-      try {
-        setLoading(true);
-        const trendingMovies = await fetchMovies('/trending/movie/day');
-        setTrending(trendingMovies.data.results);
-      } catch {
-        setError('Something went wrong. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    getTrending();
-  }, []);
+    dispatch(fetch('/trending/movie/day'));
+  }, [dispatch]);
 
   return (
     <div>
       <h2>Trending today</h2>
       <ul>
-        {trending.map(({ id, title }) => {
+        {items.map(({ id, title }) => {
           return (
             <li key={id}>
               <Link to={`movies/${id}`} state={{ from: location }}>
@@ -37,7 +27,7 @@ const Home = () => {
           );
         })}
       </ul>
-      {loading && <p>Loading...</p>}
+      {isLoading && <p>Loading...</p>}
       {error && <p>{error}</p>}
     </div>
   );

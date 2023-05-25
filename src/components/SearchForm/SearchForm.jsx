@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { fetchMovies } from 'API';
-import { Link, useSearchParams, useLocation } from 'react-router-dom';
-import { SearchForm } from './SearchForm.styled';
+import { fetch } from 'API';
+import { useSearchParams, useLocation } from 'react-router-dom';
 
-const Movies = () => {
+export const SearchForm = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('query');
   const [results, setResults] = useState([]);
@@ -15,9 +14,7 @@ const Movies = () => {
     const searchMovie = async () => {
       try {
         setLoading(true);
-        const searchedMovies = await fetchMovies(
-          `/search/movie?query=${query}`
-        );
+        const searchedMovies = await fetch(`/search/movie?query=${query}`);
         if (searchedMovies.data.results.length < 1) {
           setResults([]);
           alert(
@@ -43,35 +40,17 @@ const Movies = () => {
   };
 
   return (
-    <div>
-      <SearchForm onSubmit={onSearch}>
-        <input
-          name="input"
-          type="text"
-          autoComplete="off"
-          autoFocus
-          placeholder="Search movies"
-        />
-        <button type="submit">
-          <span>Search</span>
-        </button>
-      </SearchForm>
-      <ul>
-        {query &&
-          results.map(({ id, title }) => {
-            return (
-              <li key={id}>
-                <Link to={`${id}`} state={{ from: location }}>
-                  {title}
-                </Link>
-              </li>
-            );
-          })}
-      </ul>
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
-    </div>
+    <form onSubmit={onSearch}>
+      <input
+        name="input"
+        type="text"
+        autoComplete="off"
+        autoFocus
+        placeholder="Search movies"
+      />
+      <button type="submit">
+        <span>Search</span>
+      </button>
+    </form>
   );
 };
-
-export default Movies;

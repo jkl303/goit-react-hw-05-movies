@@ -1,8 +1,8 @@
 import { Link, useParams, Outlet, useLocation } from 'react-router-dom';
 import { useState, useEffect, Suspense } from 'react';
-import { fetchMovies } from 'API';
+import { fetch } from 'API';
 
-const MovieDetails = () => {
+const Details = () => {
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState({});
   const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ const MovieDetails = () => {
     const getMovieDetails = async () => {
       try {
         setLoading(true);
-        const details = await fetchMovies(`/movie/${movieId}`);
+        const details = await fetch(`/movie/${movieId}`);
         setMovieDetails(details.data);
       } catch {
         setError('Something went wrong. Please try again.');
@@ -63,4 +63,4 @@ const MovieDetails = () => {
   );
 };
 
-export default MovieDetails;
+export default Details;
