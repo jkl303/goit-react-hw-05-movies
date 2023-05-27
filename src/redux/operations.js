@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-const API_KEY = '95e0a9f6333c954132e51c9aa189b3ea';
 axios.defaults.baseURL = `https://api.themoviedb.org/3`;
+const API_KEY = '95e0a9f6333c954132e51c9aa189b3ea';
 
-export const fetch = createAsyncThunk(
+export const fetchItems = createAsyncThunk(
   'data/fetch',
   async (endpoint, thunkAPI) => {
     try {
@@ -14,8 +14,8 @@ export const fetch = createAsyncThunk(
         },
       });
       return response.data.results;
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e.message);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );

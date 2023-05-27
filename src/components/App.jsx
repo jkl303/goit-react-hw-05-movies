@@ -4,6 +4,8 @@ import { lazy } from 'react';
 import { GlobalStyle } from './GlobalStyle';
 
 const Home = lazy(() => import('pages/Home/Home'));
+const Movies = lazy(() => import('pages/Movies/Movies'));
+const TV = lazy(() => import('pages/TV/TV'));
 const Details = lazy(() => import('pages/Details/Details'));
 const Cast = lazy(() => import('./Cast/Cast'));
 const Reviews = lazy(() => import('./Reviews/Reviews'));
@@ -14,6 +16,8 @@ export const App = () => {
       <Routes>
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<Home />} />
+          <Route path="movies/" element={<Movies />} />
+          <Route path="tv/" element={<TV />} />
           <Route path="movies/:movieId" element={<Details />}>
             <Route path="cast" element={<Cast />} />
             <Route path="reviews" element={<Reviews />} />

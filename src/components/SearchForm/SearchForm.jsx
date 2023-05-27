@@ -1,42 +1,39 @@
-import { useState, useEffect } from 'react';
-import { fetch } from 'API';
-import { useSearchParams, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { getItems } from 'redux/selectors';
+import { setEndpoint, setTitle } from 'redux/slices';
 
 export const SearchForm = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('query');
-  const [results, setResults] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const location = useLocation();
+  const { items } = useSelector(getItems);
 
   useEffect(() => {
-    const searchMovie = async () => {
-      try {
-        setLoading(true);
-        const searchedMovies = await fetch(`/search/movie?query=${query}`);
-        if (searchedMovies.data.results.length < 1) {
-          setResults([]);
-          alert(
-            'Sorry, there are no movies matching your search query. Please try again.'
-          );
-        } else {
-          setResults(searchedMovies.data.results);
-        }
-      } catch {
-        setError('Something went wrong. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    query !== null && searchMovie();
-  }, [query]);
+    if (query !== null) {
+      navigate('/', { replace: true });
+      dispatch(setEndpoint(`/search/multi?language=en-US&query=${query}`));
+      dispatch(
+        setTitle(
+          `${
+            items.length < 1 ? 'Nothing found' : `Search results for "${query}"`
+          }`
+        )
+      );
+    }
+  }, [dispatch, navigate, query, items]);
 
   const onSearch = e => {
     e.preventDefault();
-    const val = e.target.elements.input.value;
-    val === '' ? alert('Type something!') : setSearchParams({ query: val });
-    e.target.elements.input.value = '';
+    let { value } = e.target.elements.input;
+    if (value.trim() === '') {
+      alert('Type something!');
+    } else {
+      setSearchParams({ query: value });
+    }
+    value = '';
   };
 
   return (

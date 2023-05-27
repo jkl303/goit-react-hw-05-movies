@@ -1,7 +1,7 @@
 import { MainSection } from 'components/MainSection/MainSection';
 
-const Home = () => {
+const Movies = () => {
   return <MainSection />;
 };
 
-export default Home;
+export default Movies;

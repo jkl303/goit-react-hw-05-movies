@@ -1,7 +1,7 @@
 import { MainSection } from 'components/MainSection/MainSection';
 
-const Home = () => {
+const TV = () => {
   return <MainSection />;
 };
 
-export default Home;
+export default TV;
