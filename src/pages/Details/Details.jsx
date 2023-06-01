@@ -3,29 +3,29 @@ import { useState, useEffect, Suspense } from 'react';
 import { fetch } from 'API';
 
 const Details = () => {
-  const { movieId } = useParams();
-  const [movieDetails, setMovieDetails] = useState({});
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { id, type } = useParams();
   const location = useLocation();
   const backLinkHref = location.state?.from ?? '/';
+  const [details, setDetails] = useState({});
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const getMovieDetails = async () => {
+    const getDetails = async () => {
       try {
         setLoading(true);
-        const details = await fetch(`/movie/${movieId}`);
-        setMovieDetails(details.data);
-      } catch {
-        setError('Something went wrong. Please try again.');
+        const { data } = await fetch(`/${type}/${id}`);
+        setDetails(data);
+      } catch (error) {
+        setError(error);
       } finally {
         setLoading(false);
       }
     };
-    getMovieDetails();
-  }, [movieId]);
+    getDetails();
+  }, [id, type]);
 
-  const { poster_path, title, vote_average, overview, genres } = movieDetails;
+  const { poster_path, tagline, vote_average, overview, genres } = details;
 
   return (
     <div>
@@ -33,11 +33,25 @@ const Details = () => {
       <div>
         <img
           src={poster_path && `https://image.tmdb.org/t/p/w500${poster_path}`}
-          alt={title}
+          alt={details.title || details.name}
           width={200}
         />
-        <h2>{title}</h2>
+        <h2>{details.title || details.name}</h2>
         <p>User score: {vote_average}</p>
+        {tagline && <p>Tagline: {`"${tagline}"`}</p>}
+        {details.runtime ? (
+          <div>
+            <p>Release date: {details.release_date}</p>
+            <p>Runtime: {`${details.runtime} min`}</p>
+          </div>
+        ) : (
+          <div>
+            <p>First air date: {details.first_air_date}</p>
+            <p>Number of seasons: {details.number_of_seasons}</p>
+            <p>Number of episodes: {details.number_of_episodes}</p>
+            <p>Episode runtime: {`${details.episode_run_time} min`}</p>
+          </div>
+        )}
         <h3>Overview</h3>
         <p>{overview}</p>
         <h3>Genres</h3>

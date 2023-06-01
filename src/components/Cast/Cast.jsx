@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import { fetch } from 'API';
 
 const Cast = () => {
-  const { movieId } = useParams();
-  const [movieCast, setMovieCast] = useState([]);
+  const { id, type } = useParams();
+  const [cast, setCast] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -12,8 +12,8 @@ const Cast = () => {
     const getCast = async () => {
       try {
         setLoading(true);
-        const cast = await fetch(`/movie/${movieId}/credits`);
-        setMovieCast(cast.data.cast);
+        const cast = await fetch(`/${type}/${id}/credits`);
+        setCast(cast.data.cast);
       } catch {
         setError('Something went wrong. Please try again.');
       } finally {
@@ -21,13 +21,13 @@ const Cast = () => {
       }
     };
     getCast();
-  }, [movieId]);
+  }, [id, type]);
 
   return (
     <div>
       <ul>
         {useEffect &&
-          movieCast.slice(0, 5).map(({ id, profile_path, name, character }) => {
+          cast.slice(0, 5).map(({ id, profile_path, name, character }) => {
             return (
               <li key={id}>
                 <img

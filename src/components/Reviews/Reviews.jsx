@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import { fetch } from 'API';
 
 const Reviews = () => {
-  const { movieId } = useParams();
-  const [movieReviews, setMovieReviews] = useState([]);
+  const { id, type } = useParams();
+  const [reviews, setReviews] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -12,8 +12,8 @@ const Reviews = () => {
     const getReviews = async () => {
       try {
         setLoading(true);
-        const reviews = await fetch(`/movie/${movieId}/reviews`);
-        setMovieReviews(reviews.data.results);
+        const reviews = await fetch(`/${type}/${id}/reviews`);
+        setReviews(reviews.data.results);
       } catch {
         setError('Something went wrong. Please try again.');
       } finally {
@@ -21,13 +21,13 @@ const Reviews = () => {
       }
     };
     getReviews();
-  }, [movieId]);
+  }, [id, type]);
 
   return (
     <div>
-      {useEffect && movieReviews.length > 0 ? (
+      {useEffect && reviews.length > 0 ? (
         <ul>
-          {movieReviews.map(({ id, author, content }) => {
+          {reviews.map(({ id, author, content }) => {
             return (
               <li key={id}>
                 <h3>Author: {author}</h3>

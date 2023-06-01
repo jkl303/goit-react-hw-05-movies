@@ -12,6 +12,6 @@ export const fetch = async endpoint => {
     });
     return response;
   } catch (error) {
-    return error;
+    return error.message;
   }
 };

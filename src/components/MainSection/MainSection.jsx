@@ -1,36 +1,88 @@
-import { useEffect } from 'react';
-import { fetchItems } from 'redux/operations';
-import { Link, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { getItems, getEndpoint, getPage, getTitle } from 'redux/selectors';
+import { fetch } from 'API';
+import { Pages } from 'components/Pages/Pages';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useParams } from 'react-router-dom';
 
-export const MainSection = () => {
-  const dispatch = useDispatch();
+export const MainSection = ({ endpoint, title }) => {
   const location = useLocation();
-  const { items, isLoading, error } = useSelector(getItems);
-  const endpoint = useSelector(getEndpoint);
-  const title = useSelector(getTitle);
-  const page = useSelector(getPage);
+  const params = useParams();
+
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isShowDetails, setIsShowDetails] = useState(false);
+
+  console.log(data.results);
 
   useEffect(() => {
-    dispatch(fetchItems(`${endpoint}&page=${page}`));
-  }, [dispatch, endpoint, page]);
+    const getItems = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${endpoint}&page=${params.page || 1}`);
+        setData(response.data);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getItems();
+  }, [endpoint, params.page]);
 
   return (
     <section>
       <h2>{title}</h2>
       <ul>
-        {items.map(item => {
-          return (
-            <li key={item.id}>
-              <Link to={`movies/${item.id}`} state={{ from: location }}>
-                {item.title || item.name}
-              </Link>
-            </li>
-          );
-        })}
+        {data.results &&
+          data.results.map(item => {
+            return (
+              <li key={item.id}>
+                <Link
+                  to={`/details/${
+                    item.media_type ? item.media_type : params.type
+                  }/${item.id}`}
+                  state={{ from: location }}
+                >
+                  <img
+                    src={
+                      item.poster_path &&
+                      `https://image.tmdb.org/t/p/w500${item.poster_path}`
+                    }
+                    alt={item.title || item.name}
+                    width={100}
+                  />
+                  {item.title || item.name}
+                  <div
+                    onMouseOver={() => setIsShowDetails(true)}
+                    onMouseOut={() => setIsShowDetails(false)}
+                  >
+                    Show details
+                  </div>
+                </Link>
+                {isShowDetails && (
+                  <div
+                    onMouseOver={() => setIsShowDetails(true)}
+                    onMouseOut={() => setIsShowDetails(false)}
+                  >
+                    <Link
+                      to={`/details/${
+                        item.media_type ? item.media_type : params.type
+                      }/${item.id}`}
+                      state={{ from: location }}
+                    >
+                      {item.title || item.name}
+                    </Link>
+                    <p>User score: {item.vote_average}</p>
+                    <h3>Overview</h3>
+                    <p>{item.overview}</p>
+                  </div>
+                )}
+              </li>
+            );
+          })}
       </ul>
-      {isLoading && <p>Loading...</p>}
+      <Pages totalPages={data.total_pages} />
+      {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
     </section>
   );
