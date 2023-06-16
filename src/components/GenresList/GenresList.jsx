@@ -1,8 +1,9 @@
 import { fetch } from 'API';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { GenreLinkStyled, GenresListStyled } from './GenresList.styled';
+import { Container } from 'components/Container/Container';
 
-export const GenresList = ({ type }) => {
+export const GenresList = ({ type, closeFn }) => {
   const [genres, setGenres] = useState(null);
 
   useEffect(() => {
@@ -20,16 +21,25 @@ export const GenresList = ({ type }) => {
   }, [type]);
 
   return (
-    <ul>
-      {genres &&
-        genres.map(genre => {
-          const { id, name } = genre;
-          return (
-            <li key={id}>
-              <Link to={`${type}/${id}/${name.toLowerCase()}`}>{name}</Link>
-            </li>
-          );
-        })}
-    </ul>
+    <GenresListStyled onMouseOver={() => closeFn(type)} onMouseOut={closeFn}>
+      <Container>
+        <ul>
+          {genres &&
+            genres.map(genre => {
+              const { id, name } = genre;
+              return (
+                <li key={id}>
+                  <GenreLinkStyled
+                    to={`${type}/${id}/${name.toLowerCase()}`}
+                    onClick={closeFn}
+                  >
+                    {name}
+                  </GenreLinkStyled>
+                </li>
+              );
+            })}
+        </ul>
+      </Container>
+    </GenresListStyled>
   );
 };

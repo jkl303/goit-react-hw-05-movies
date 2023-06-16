@@ -1,52 +1,76 @@
-import { Link, NavLink, useParams } from 'react-router-dom';
+import { Link, NavLink, useParams, useSearchParams } from 'react-router-dom';
+import { NextIcon, PageListStyled, PrevIcon } from './PagesList.styled';
 
 export const Pages = ({ totalPages }) => {
   const params = useParams();
+  const [searchParams] = useSearchParams();
+
   const current = Number(params.page) || 1;
   const total = totalPages <= 500 ? totalPages : 500;
 
   let pages = [];
-  let middlePage = 6;
 
-  if (current > total - 5) {
-    middlePage = total - 5;
+  const getLink = page => {
+    if (params.type === 'search') {
+      const query = searchParams.get('query');
+      return `page/${page}?query=${query}`;
+    } else {
+      return `page/${page}`;
+    }
+  };
+
+  if (total < 10) {
+    for (let i = 2; i < total; i += 1) {
+      pages.push(i);
+    }
+  } else {
+    let middlePage = 6;
+
+    if (current > total - 5) {
+      middlePage = total - 5;
+    }
+
+    if (current > 5 && current < total - 4) {
+      middlePage = current;
+    }
+
+    for (let i = middlePage - 4; i < middlePage + 5; i += 1) {
+      pages.push(i);
+    }
   }
 
-  if (current > 5 && current < total - 4) {
-    middlePage = current;
-  }
-
-  for (let i = middlePage - 4; i < middlePage + 5; i += 1) {
-    pages.push(i);
-  }
-
-  return (
-    <ul>
-      {current !== 1 && (
-        <li>
-          <Link to={`page/${current - 1}`}>prev</Link>
-        </li>
-      )}
-      <li>
-        <NavLink to={`page/1`}>1</NavLink>
-      </li>
-      {current > 6 && <span>...</span>}
-      {pages
-        .filter(page => page !== 1 && page !== total)
-        .map(page => (
-          <li key={page}>
-            <NavLink to={`page/${page}`}>{page}</NavLink>
+  if (total > 1)
+    return (
+      <PageListStyled>
+        {current !== 1 && (
+          <li>
+            <Link to={getLink(current - 1)}>
+              <PrevIcon />
+            </Link>
           </li>
-        ))}
-      {current < total - 5 && <span>...</span>}
-      <li>
-        <NavLink to={`page/${total}`}>{total}</NavLink>
-      </li>
-      {current !== total && (
+        )}
         <li>
-          <Link to={`page/${current + 1}`}>next</Link>
+          <NavLink to={getLink(1)}>1</NavLink>
         </li>
-      )}
-    </ul>
-  );
+        {current > 6 && <span>...</span>}
+        {pages
+          .filter(page => page !== 1 && page !== total)
+          .map(page => (
+            <li key={page}>
+              <NavLink to={getLink(page)}>{page}</NavLink>
+            </li>
+          ))}
+        {current < total - 5 && <span>...</span>}
+        <li>
+          <NavLink to={getLink(total)}>{total}</NavLink>
+        </li>
+        {current !== total && (
+          <li>
+            <Link to={getLink(current + 1)}>
+              <NextIcon />
+            </Link>
+          </li>
+        )}
+      </PageListStyled>
+    );
 };

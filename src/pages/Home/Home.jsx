@@ -11,7 +11,7 @@ const Home = () => {
   if (params.type && !params.id) {
     if (params.type === 'search') {
       const query = searchParams.get('query');
-      endpoint = `/search/multi?language=en-US&query=${query}`;
+      endpoint = `/search/movie?language=en-US&query=${query}`;
       title = `Search results for "${query}"`;
     } else {
       endpoint = `/trending/${params.type}/day?language=en-US`;

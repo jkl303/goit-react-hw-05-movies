@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { fetch } from 'API';
+import { ReviewsStyled, UserIcon } from './Reviews.styled';
 
 const Reviews = () => {
   const { id, type } = useParams();
@@ -24,24 +25,26 @@ const Reviews = () => {
   }, [id, type]);
 
   return (
-    <div>
+    <>
       {useEffect && reviews.length > 0 ? (
-        <ul>
+        <ReviewsStyled>
           {reviews.map(({ id, author, content }) => {
             return (
               <li key={id}>
-                <h3>Author: {author}</h3>
+                <h3>
+                  <UserIcon /> {author}
+                </h3>
                 <p>{content}</p>
               </li>
             );
           })}
-        </ul>
+        </ReviewsStyled>
       ) : (
         <p>We don't have any reviews for this movie.</p>
       )}
       {error && <p>{error}</p>}
       {loading && <p>Loading...</p>}
-    </div>
+    </>
   );
 };
 

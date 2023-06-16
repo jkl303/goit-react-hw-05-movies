@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { fetch } from 'API';
+import { CastStyled } from './Cast.styled';
 
 const Cast = () => {
   const { id, type } = useParams();
@@ -24,8 +25,8 @@ const Cast = () => {
   }, [id, type]);
 
   return (
-    <div>
-      <ul>
+    <>
+      <CastStyled>
         {useEffect &&
           cast.slice(0, 5).map(({ id, profile_path, name, character }) => {
             return (
@@ -34,15 +35,17 @@ const Cast = () => {
                   src={`https://image.tmdb.org/t/p/w500${profile_path}`}
                   alt={name}
                 ></img>
-                <p>{name}</p>
-                <p>Character: {character}</p>
+                <div>
+                  <h3>{name}</h3>
+                  <p>{character}</p>
+                </div>
               </li>
             );
           })}
-      </ul>
+      </CastStyled>
       {error && <p>{error}</p>}
       {loading && <p>Loading...</p>}
-    </div>
+    </>
   );
 };
 

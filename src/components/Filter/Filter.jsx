@@ -1,30 +1,55 @@
-import { GenresList } from 'components/GenresList/GenresList';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import useWindowWidth from 'hooks/useWindowWidth';
+import { FilterStyled, ListIcon, XIcon } from './Filter.styled';
+import { FilterLink } from './Filter.styled';
 
-export const Filter = () => {
-  const [isShowMovieGenres, setIsShowMovieGenres] = useState(false);
-  const [isShowTVGenres, setIsShowTVGenres] = useState(false);
+export const Filter = ({ closeFn, isShowMovieGenres, isShowTVGenres }) => {
+  const width = useWindowWidth();
 
   return (
-    <ul>
-      <li>
-        <Link to={'/'}>All</Link>
-      </li>
-      <li
-        onMouseOver={() => setIsShowMovieGenres(true)}
-        onMouseOut={() => setIsShowMovieGenres(false)}
+    <FilterStyled>
+      <FilterLink to={'/'} onClick={closeFn}>
+        All
+      </FilterLink>
+      <FilterLink
+        to={'movie/'}
+        onMouseOver={() => width > 1279 && closeFn('movie')}
+        onMouseOut={closeFn}
+        onFocus={() => width > 1279 && closeFn('movie')}
+        onBlur={closeFn}
+        onClick={closeFn}
       >
-        <Link to={'movie/'}>Movies</Link>
-        {isShowMovieGenres && <GenresList type={'movie'} />}
-      </li>
-      <li
-        onMouseOver={() => setIsShowTVGenres(true)}
-        onMouseOut={() => setIsShowTVGenres(false)}
+        Movies
+      </FilterLink>
+      {width < 1280 && (
+        <button
+          type="button"
+          onClick={() => {
+            closeFn('movie');
+          }}
+        >
+          {isShowMovieGenres ? <XIcon /> : <ListIcon />}
+        </button>
+      )}
+      <FilterLink
+        to={'tv/'}
+        onMouseOver={() => width > 1279 && closeFn('tv')}
+        onMouseOut={closeFn}
+        onFocus={() => width > 1279 && closeFn('tv')}
+        onBlur={closeFn}
+        onClick={closeFn}
       >
-        <Link to={'tv/'}>TV Shows</Link>
-        {isShowTVGenres && <GenresList type={'tv'} />}
-      </li>
-    </ul>
+        TV Shows
+      </FilterLink>
+      {width < 1280 && (
+        <button
+          type="button"
+          onClick={() => {
+            closeFn('tv');
+          }}
+        >
+          {isShowTVGenres ? <XIcon /> : <ListIcon />}
+        </button>
+      )}
+    </FilterStyled>
   );
 };
