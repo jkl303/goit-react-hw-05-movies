@@ -13,6 +13,8 @@ export const MainSection = ({ endpoint, title }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  console.log(data.results);
+
   useEffect(() => {
     const getItems = async () => {
       try {
@@ -37,7 +39,7 @@ export const MainSection = ({ endpoint, title }) => {
             data.results.map(item => {
               return (
                 <li key={item.id}>
-                  <ItemCard item={item} />
+                  <ItemCard item={item} type={item.media_type || params.type} />
                 </li>
               );
             })

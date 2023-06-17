@@ -5,7 +5,7 @@ import { InfoButtonStyled, InfoIcon, ItemCardStyled } from './ItemCard.styled';
 import { randomStubImg } from 'images/images';
 import { useState } from 'react';
 
-export const ItemCard = ({ item }) => {
+export const ItemCard = ({ item, type }) => {
   const location = useLocation();
   const width = useWindowWidth();
 
@@ -14,12 +14,7 @@ export const ItemCard = ({ item }) => {
   return (
     <>
       <ItemCardStyled>
-        <Link
-          to={`/details/${item.media_type ? item.media_type : 'movie'}/${
-            item.id
-          }`}
-          state={{ from: location }}
-        >
+        <Link to={`/details/${type}/${item.id}`} state={{ from: location }}>
           <img
             src={
               item.poster_path
