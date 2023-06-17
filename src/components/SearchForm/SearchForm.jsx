@@ -32,7 +32,7 @@ export const SearchForm = () => {
 
   return (
     <SearchFormStyled onSubmit={onSearch}>
-      <input name="input" type="text" autoComplete="off" autoFocus />
+      <input name="input" type="text" autoComplete="off" />
       <button type="submit">
         <SearchIcon />
       </button>
