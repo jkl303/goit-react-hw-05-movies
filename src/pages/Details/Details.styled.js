@@ -2,9 +2,14 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { Link, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { mediaQueries } from 'styles/mediaQueries';
+import BGImgDesk from '../../images/BGImgDesk.jpg';
 
 export const DetailsSectionStyled = styled.section`
   padding: 20px 0 30px;
+  @media screen and (min-width: 1280px) {
+    background-image: url(${BGImgDesk});
+    background-size: cover;
+  }
 
   h2 {
     margin: 20px 0 6px;
