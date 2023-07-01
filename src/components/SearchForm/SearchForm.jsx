@@ -2,20 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { SearchFormStyled, SearchIcon } from './SearchForm.styled';
 
-Notify.init({
-  width: '220px',
-  position: 'right-top',
-  distance: '80px',
-  borderRadius: '10px',
-  timeout: 2000,
-  showOnlyTheLastOne: true,
-  fontSize: '18px',
-  failure: {
-    background: '#ffb914',
-    textColor: '#212250',
-  },
-});
-
 export const SearchForm = () => {
   const navigate = useNavigate();
 

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import useWindowWidth from 'hooks/useWindowWidth';
 import { HoverInfo } from 'components/HoverInfo/HoverInfo';
@@ -39,4 +40,16 @@ export const ItemCard = ({ item, type }) => {
       </ItemCardStyled>
     </>
   );
+};
+
+ItemCard.propTypes = {
+  item: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    overview: PropTypes.string.isRequired,
+    poster_path: PropTypes.string,
+    title: PropTypes.string,
+    name: PropTypes.string,
+    vote_count: PropTypes.number,
+  }),
+  type: PropTypes.string,
 };

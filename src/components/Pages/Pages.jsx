@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Link, NavLink, useParams, useSearchParams } from 'react-router-dom';
 import { NextIcon, PageListStyled, PrevIcon } from './PagesList.styled';
 
@@ -74,3 +75,5 @@ export const Pages = ({ totalPages }) => {
       </PageListStyled>
     );
 };
+
+Pages.propTypes = { totalPages: PropTypes.number.isRequired };

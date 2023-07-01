@@ -2,6 +2,9 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { fetch } from 'API';
 import { ReviewsStyled, UserIcon } from './Reviews.styled';
+import { Loader } from 'components/Loader/Loader';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { NoDataStyled } from 'styles/NoDataMessage.styled';
 
 const Reviews = () => {
   const { id, type } = useParams();
@@ -13,7 +16,9 @@ const Reviews = () => {
     const getReviews = async () => {
       try {
         setLoading(true);
-        const reviews = await fetch(`/${type}/${id}/reviews`);
+        const reviews = await fetch(
+          `/${type === 'search' ? 'movie' : type}/${id}/reviews`
+        );
         setReviews(reviews.data.results);
       } catch {
         setError('Something went wrong. Please try again.');
@@ -40,10 +45,10 @@ const Reviews = () => {
           })}
         </ReviewsStyled>
       ) : (
-        <p>We don't have any reviews for this movie.</p>
+        <NoDataStyled>We don't have any reviews for this movie.</NoDataStyled>
       )}
-      {error && <p>{error}</p>}
-      {loading && <p>Loading...</p>}
+      {error && Notify.failure(error.message)}
+      {loading && <Loader />}
     </>
   );
 };

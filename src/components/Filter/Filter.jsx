@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import useWindowWidth from 'hooks/useWindowWidth';
 import { FilterStyled, ListIcon, XIcon } from './Filter.styled';
 import { FilterLink } from './Filter.styled';
@@ -52,4 +54,9 @@ export const Filter = ({ closeFn, isShowMovieGenres, isShowTVGenres }) => {
       )}
     </FilterStyled>
   );
+};
+
+Filter.propTypes = {
+  isShowMovieGenres: PropTypes.bool.isRequired,
+  isShowTVGenres: PropTypes.bool.isRequired,
 };

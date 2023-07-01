@@ -1,20 +1,28 @@
+import PropTypes from 'prop-types';
 import { fetch } from 'API';
 import { useEffect, useState } from 'react';
 import { GenreLinkStyled, GenresListStyled } from './GenresList.styled';
 import { Container } from 'components/Container/Container';
+import { Loader } from 'components/Loader/Loader';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 export const GenresList = ({ type, closeFn }) => {
   const [genres, setGenres] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getGenres = async () => {
       try {
+        setLoading(true);
         const {
           data: { genres },
         } = await fetch(`/genre/${type}/list`);
         setGenres(genres);
       } catch (error) {
-        alert(error.message);
+        setError(error);
+      } finally {
+        setLoading(false);
       }
     };
     getGenres();
@@ -39,7 +47,11 @@ export const GenresList = ({ type, closeFn }) => {
               );
             })}
         </ul>
+        {error && Notify.failure(error.message)}
+        {loading && <Loader />}
       </Container>
     </GenresListStyled>
   );
 };
+
+GenresList.propTypes = { type: PropTypes.string.isRequired };

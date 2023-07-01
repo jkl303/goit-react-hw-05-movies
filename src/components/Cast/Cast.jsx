@@ -2,6 +2,9 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { fetch } from 'API';
 import { CastStyled } from './Cast.styled';
+import { Loader } from 'components/Loader/Loader';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { NoDataStyled } from 'styles/NoDataMessage.styled';
 
 const Cast = () => {
   const { id, type } = useParams();
@@ -13,7 +16,9 @@ const Cast = () => {
     const getCast = async () => {
       try {
         setLoading(true);
-        const cast = await fetch(`/${type}/${id}/credits`);
+        const cast = await fetch(
+          `/${type === 'search' ? 'movie' : type}/${id}/credits`
+        );
         setCast(cast.data.cast);
       } catch {
         setError('Something went wrong. Please try again.');
@@ -26,9 +31,9 @@ const Cast = () => {
 
   return (
     <>
-      <CastStyled>
-        {useEffect &&
-          cast.slice(0, 5).map(({ id, profile_path, name, character }) => {
+      {useEffect && cast.length > 0 ? (
+        <CastStyled>
+          {cast.slice(0, 5).map(({ id, profile_path, name, character }) => {
             return (
               <li key={id}>
                 <img
@@ -42,9 +47,12 @@ const Cast = () => {
               </li>
             );
           })}
-      </CastStyled>
-      {error && <p>{error}</p>}
-      {loading && <p>Loading...</p>}
+        </CastStyled>
+      ) : (
+        <NoDataStyled cast={true}>Cast unavailable</NoDataStyled>
+      )}
+      {error && Notify.failure(error.message)}
+      {loading && <Loader />}
     </>
   );
 };

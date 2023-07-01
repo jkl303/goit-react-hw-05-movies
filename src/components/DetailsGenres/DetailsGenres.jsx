@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Link, useParams } from 'react-router-dom';
 import { DetailsGenresListStyled } from './DetailsGenresList.styled';
 
@@ -21,4 +22,13 @@ export const DetailsGenres = ({ genres }) => {
       </DetailsGenresListStyled>
     </>
   );
+};
+
+DetailsGenres.propTypes = {
+  genres: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ),
 };

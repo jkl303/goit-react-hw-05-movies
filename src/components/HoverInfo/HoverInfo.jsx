@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Link, useLocation } from 'react-router-dom';
 import { HoverInfoStyled } from './HoverInfo.styled';
 
@@ -8,7 +9,6 @@ export const HoverInfo = ({ item, setIsShowDetails }) => {
     <HoverInfoStyled
       onMouseOver={() => {
         setIsShowDetails(true);
-        console.log('over');
       }}
       onMouseOut={() => setIsShowDetails(false)}
     >
@@ -28,4 +28,15 @@ export const HoverInfo = ({ item, setIsShowDetails }) => {
       </p>
     </HoverInfoStyled>
   );
+};
+
+HoverInfo.propTypes = {
+  item: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    vote_average: PropTypes.number.isRequired,
+    overview: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    name: PropTypes.string,
+    media_type: PropTypes.string,
+  }),
 };

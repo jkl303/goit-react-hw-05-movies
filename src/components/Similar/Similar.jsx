@@ -5,6 +5,8 @@ import { fetch } from 'API';
 import useWindowWidth from 'hooks/useWindowWidth';
 import { useParams } from 'react-router-dom';
 import { Container } from 'components/Container/Container';
+import { Loader } from 'components/Loader/Loader';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 export const Similar = () => {
   const { id, type } = useParams();
@@ -39,13 +41,13 @@ export const Similar = () => {
           {similar.map(item => {
             return (
               <li key={item.id}>
-                <ItemCard item={item} />
+                <ItemCard item={item} type={type} />
               </li>
             );
           })}
         </SimilarListStyled>
-        {error && <p>{error}</p>}
-        {loading && <p>Loading...</p>}
+        {error && Notify.failure(error.message)}
+        {loading && <Loader />}
       </Container>
     );
   }
