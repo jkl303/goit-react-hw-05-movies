@@ -2,13 +2,15 @@ import { FiUser } from 'react-icons/fi';
 import styled from 'styled-components';
 import { mediaQueries } from 'styles/mediaQueries';
 
-export const ReviewsStyled = styled.ul`
+export const ReviewsWrapper = styled.div`
   padding: 26px 20px;
   border-radius: 16px;
   background-color: var(--bgSec);
   ${mediaQueries('tablet')`
   padding: 30px;`}
+`;
 
+export const ReviewsStyled = styled.ul`
   li:not(:last-child) {
     margin-bottom: 30px;
   }

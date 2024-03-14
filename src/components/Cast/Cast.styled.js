@@ -1,16 +1,20 @@
 import styled from 'styled-components';
 import { mediaQueries } from 'styles/mediaQueries';
 
-export const CastStyled = styled.ul`
-  display: flex;
+export const CastWrapper = styled.div`
   padding: 26px 20px;
-  flex-direction: column;
-  gap: 30px;
   border-radius: 16px;
   border-top-left-radius: 0;
   background-color: var(--bgSec);
   ${mediaQueries('tablet')`
-  padding: 30px;
+  padding: 30px;`}
+`;
+
+export const CastStyled = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  ${mediaQueries('tablet')`
   flex-direction: row;
   flex-wrap: wrap;`}
 

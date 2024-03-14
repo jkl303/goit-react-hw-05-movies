@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { fetch } from 'API';
-import { CastStyled } from './Cast.styled';
+import { CastStyled, CastWrapper } from './Cast.styled';
 import { Loader } from 'components/Loader/Loader';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { NoDataStyled } from 'styles/NoDataMessage.styled';
@@ -31,28 +31,34 @@ const Cast = () => {
 
   return (
     <>
-      {useEffect && cast.length > 0 ? (
-        <CastStyled>
-          {cast.slice(0, 5).map(({ id, profile_path, name, character }) => {
-            return (
-              <li key={id}>
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${profile_path}`}
-                  alt={name}
-                ></img>
-                <div>
-                  <h3>{name}</h3>
-                  <p>{character}</p>
-                </div>
-              </li>
-            );
-          })}
-        </CastStyled>
-      ) : (
-        <NoDataStyled cast={true}>Cast unavailable</NoDataStyled>
+      {useEffect && (
+        <CastWrapper>
+          {cast.length > 0 && (
+            <CastStyled>
+              {cast.slice(0, 6).map(({ id, profile_path, name, character }) => {
+                return (
+                  <li key={id}>
+                    <img
+                      src={`https://image.tmdb.org/t/p/w500${profile_path}`}
+                      alt={name}
+                      loading="lazy"
+                    ></img>
+                    <div>
+                      <h3>{name}</h3>
+                      <p>{character}</p>
+                    </div>
+                  </li>
+                );
+              })}
+            </CastStyled>
+          )}
+          {useEffect && cast.length < 1 && !loading && (
+            <NoDataStyled cast={true}>Cast unavailable</NoDataStyled>
+          )}
+          {error && Notify.failure(error.message)}
+          {loading && <Loader white />}
+        </CastWrapper>
       )}
-      {error && Notify.failure(error.message)}
-      {loading && <Loader />}
     </>
   );
 };

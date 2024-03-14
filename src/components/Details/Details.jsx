@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { DetailsStyled, MainInfoStyled } from './Detals.styled';
+import { DetailsStyled, MainInfoStyled } from './Details.styled';
 import { randomStubImg } from 'images/images';
 
 export const Details = ({ details }) => {
@@ -14,6 +14,7 @@ export const Details = ({ details }) => {
             : randomStubImg()
         }
         alt={details.title || details.name}
+        loading="lazy"
       />
       <MainInfoStyled>
         <h1>{details.title || details.name}</h1>

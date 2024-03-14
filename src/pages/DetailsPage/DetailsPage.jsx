@@ -47,7 +47,7 @@ const DetailsPage = () => {
         </BackLink>
         <Details details={details} />
         <h2>Overview</h2>
-        {details.overview && <p>{details.overview}</p>}{' '}
+        {details.overview && <p>{details.overview}</p>}
         {details.genres && <DetailsGenres genres={details.genres} />}
         <h2>Additional information</h2>
         <AdditionalLink to="cast">Cast</AdditionalLink>

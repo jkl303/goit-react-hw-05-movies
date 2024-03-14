@@ -15,7 +15,7 @@ export const MainSection = ({
 }) => {
   const params = useParams();
 
-  const [data, setData] = useState({});
+  const [data, setData] = useState({ results: [] });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -40,21 +40,24 @@ export const MainSection = ({
       <Container>
         <h1>{title}</h1>
         <ItemListStyled>
-          {data.results && data.results !== [] ? (
+          {useEffect &&
+            data.results.length > 0 &&
             data.results.map(item => {
               return (
                 <li key={item.id}>
                   <ItemCard item={item} type={item.media_type || params.type} />
                 </li>
               );
-            })
-          ) : (
+            })}
+          {useEffect && data.results.length < 1 && !loading && (
             <p>We can't find anything for this query:(</p>
           )}
         </ItemListStyled>
-        {data.results && <Pages totalPages={data.total_pages} />}
         {error && Notify.failure(error.message)}
         {loading && <Loader />}
+        {useEffect && data.results.length > 0 && (
+          <Pages totalPages={data.total_pages} />
+        )}
       </Container>
     </MainSectionStyled>
   );

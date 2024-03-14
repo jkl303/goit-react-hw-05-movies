@@ -23,6 +23,7 @@ export const ItemCard = ({ item, type }) => {
                 : randomStubImg()
             }
             alt={item.title || item.name}
+            loading="lazy"
           />
           <h2>{item.title || item.name}</h2>
         </Link>

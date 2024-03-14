@@ -25,7 +25,7 @@ export const HoverInfoStyled = styled.div`
     border-left: 20px solid transparent;
     border-right: 2px solid transparent;
     border-bottom: 12px solid var(--text);
-    animation: toTop 500ms ease-in-out;
+    animation: toTop 250ms ease-in-out;
   }
 
   a {

@@ -15,7 +15,11 @@ export const PageListStyled = styled.ul`
 
   a {
     padding: 6px 2px;
-    &.active {
+    transition: color 250ms ease;
+
+    &.active,
+    :hover,
+    :focus {
       color: var(--title);
     }
   }

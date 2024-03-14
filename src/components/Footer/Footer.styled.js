@@ -24,6 +24,19 @@ export const SocialListStyled = styled.ul`
   display: flex;
   margin-top: 16px;
   justify-content: space-around;
+
+  a {
+    svg {
+      transition: transform 250ms ease;
+    }
+
+    :hover,
+    :focus {
+      svg {
+        transform: translateY(-4px);
+      }
+    }
+  }
 `;
 
 export const GitHubIcon = styled(BsGithub)`

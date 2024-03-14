@@ -5,6 +5,8 @@ import { DetailsGenresListStyled } from './DetailsGenresList.styled';
 export const DetailsGenres = ({ genres }) => {
   const { type } = useParams();
 
+  console.log(genres[0].name);
+
   return (
     <>
       <h2>Genres</h2>

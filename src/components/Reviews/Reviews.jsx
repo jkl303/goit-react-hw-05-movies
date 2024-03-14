@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { fetch } from 'API';
-import { ReviewsStyled, UserIcon } from './Reviews.styled';
+import { ReviewsStyled, ReviewsWrapper, UserIcon } from './Reviews.styled';
 import { Loader } from 'components/Loader/Loader';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { NoDataStyled } from 'styles/NoDataMessage.styled';
@@ -31,24 +31,31 @@ const Reviews = () => {
 
   return (
     <>
-      {useEffect && reviews.length > 0 ? (
-        <ReviewsStyled>
-          {reviews.map(({ id, author, content }) => {
-            return (
-              <li key={id}>
-                <h3>
-                  <UserIcon /> {author}
-                </h3>
-                <p>{content}</p>
-              </li>
-            );
-          })}
-        </ReviewsStyled>
-      ) : (
-        <NoDataStyled>We don't have any reviews for this movie.</NoDataStyled>
+      {useEffect && (
+        <ReviewsWrapper>
+          {reviews.length > 0 && (
+            <ReviewsStyled>
+              {reviews.map(({ id, author, content }) => {
+                return (
+                  <li key={id}>
+                    <h3>
+                      <UserIcon /> {author}
+                    </h3>
+                    <p>{content}</p>
+                  </li>
+                );
+              })}
+            </ReviewsStyled>
+          )}
+          {useEffect && reviews.length < 1 && !loading && (
+            <NoDataStyled>
+              We don't have any reviews for this movie.
+            </NoDataStyled>
+          )}
+          {error && Notify.failure(error.message)}
+          {loading && <Loader white />}
+        </ReviewsWrapper>
       )}
-      {error && Notify.failure(error.message)}
-      {loading && <Loader />}
     </>
   );
 };
